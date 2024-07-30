@@ -1,0 +1,80 @@
+# Basic Quiz Game
+
+# Define a class to represent a quiz question
+class Question:
+    def __init__(self, question_text, options, correct_option):
+        self.question_text = question_text
+        self.options = options
+        self.correct_option = correct_option
+
+    def display_question(self):
+        print(self.question_text)
+        for i, option in enumerate(self.options, start=1):
+            print(f"{i}. {option}")
+
+    def check_answer(self, user_answer):
+        return user_answer == self.correct_option
+
+# Define the quiz game class
+class QuizGame:
+    def __init__(self):
+        self.questions = []
+        self.score = 0
+
+    def add_question(self, question):
+        self.questions.append(question)
+
+    def ask_questions(self):
+        for question in self.questions:
+            question.display_question()
+            user_answer = self.get_user_input(len(question.options))
+            if question.check_answer(user_answer):
+                print("Correct!")
+                self.score += 1
+            else:
+                print(f"Wrong! The correct answer was: {question.options[question.correct_option - 1]}")
+            print()
+
+    def get_user_input(self, num_options):
+        while True:
+            try:
+                user_input = int(input(f"Enter the number of your answer (1-{num_options}): "))
+                if 1 <= user_input <= num_options:
+                    return user_input
+                else:
+                    print(f"Please enter a number between 1 and {num_options}.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+
+    def display_final_score(self):
+        print(f"Your final score is: {self.score}/{len(self.questions)}")
+
+# Initialize the quiz game
+def main():
+    game = QuizGame()
+
+    # Add questions to the quiz
+    game.add_question(Question(
+        "What is the capital of France?",
+        ["Berlin", "Madrid", "Paris", "Rome"],
+        correct_option=3
+    ))
+
+    game.add_question(Question(
+        "Which element has the chemical symbol 'O'?",
+        ["Gold", "Oxygen", "Osmium", "Oganesson"],
+        correct_option=2
+    ))
+
+    game.add_question(Question(
+        "What is the largest planet in our solar system?",
+        ["Earth", "Mars", "Jupiter", "Saturn"],
+        correct_option=3
+    ))
+
+    # Ask the questions and display the final score
+    game.ask_questions()
+    game.display_final_score()
+
+if __name__ == "__main__":
+    main()
